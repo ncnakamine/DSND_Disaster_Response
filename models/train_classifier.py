@@ -18,13 +18,13 @@ import pickle
 import sys
 
 """
-python train_classifier.py '../data/DisasterResponse.db' 'classifier.pkl' 'classification_report.xlsx'
+python train_classifier.py ../data/DisasterResponse.db classifier.pkl
 """
 
 
 def main():
-    if len(sys.argv) == 4:
-        database_name, model_name, classification_report_file = sys.argv[1:]
+    if len(sys.argv) == 3:
+        database_name, model_name = sys.argv[1:]
 
     print('loading data...')
     X, Y = load_data(database_name)
@@ -39,9 +39,7 @@ def main():
     model.fit(X_train, Y_train)
 
     print('evaluating model...')
-    evaluate_model(Y, X_test, Y_test, model, classification_report_file)
-
-    print('classification report saved to ', sys.argv[3])
+    evaluate_model(Y, X_test, Y_test, model)
 
     print('saving model...')
     save_model(model, model_name)
@@ -127,7 +125,7 @@ def build_model():
 
 
 
-def evaluate_model(Y, X_test, Y_test, model, classification_report_file):
+def evaluate_model(Y, X_test, Y_test, model):
     """
     test model. print precision, recall, and f1 score for each Y category
     :param Y: Y df used to get column names
@@ -139,9 +137,9 @@ def evaluate_model(Y, X_test, Y_test, model, classification_report_file):
 
     Y_pred = model.predict(X_test)
 
-    for i, c in enumerate(Y.columns):
-        print("Category: ", c.upper())
-        print(classification_report(Y_test[c].values, Y_pred[:, i]))
+    # for i, c in enumerate(Y.columns):
+    #     print("Category: ", c.upper())
+    #     print(classification_report(Y_test[c].values, Y_pred[:, i]))
 
     eval_df = pd.DataFrame()
 
@@ -154,7 +152,8 @@ def evaluate_model(Y, X_test, Y_test, model, classification_report_file):
         eval_results = eval_results[['category','value','precision','recall','f1-score','support']]
         eval_df = pd.concat([eval_df, eval_results], axis=0, ignore_index=True)
 
-    eval_df.to_excel(classification_report_file, index=False)
+    eval_df.to_excel('classification_report.xlsx', index=False)
+    print('classification report saved to classification_report.xlsx')
 
 
 
