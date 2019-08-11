@@ -40,6 +40,11 @@ models
     - (If desired) To run create_visuals.py to create pngs of relevant distributions
     	`python figures/create_visuals.py models/classifier.pkl data/DisasterResponse.db`
 
+2. Run the following command in the app's directory to run your web app.
+    `python run.py`
+
+3. Go to http://0.0.0.0:3001/
+
 
 ## Citations 
 - [Udacity Data Science Nanodegree Program](https://www.udacity.com/course/data-scientist-nanodegree--nd025)
