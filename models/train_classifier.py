@@ -152,8 +152,8 @@ def evaluate_model(Y, X_test, Y_test, model):
         eval_results = eval_results[['category','value','precision','recall','f1-score','support']]
         eval_df = pd.concat([eval_df, eval_results], axis=0, ignore_index=True)
 
-    eval_df.to_excel('classification_report.xlsx', index=False)
-    print('classification report saved to classification_report.xlsx')
+    eval_df.to_excel('models/classification_report.xlsx', index=False)
+    print('classification report saved to models/classification_report.xlsx')
 
 
 def save_model(model, model_filepath):
