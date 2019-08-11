@@ -1,7 +1,7 @@
 # DSND_Disaster_Response
 
 ## Summary
-- This project creates an ETL pipepline and machine learning pipeline to clean data and predict disaster response categories based on received messages. Natural language processing was used to generate features. A MultiOutputClassifier was used to classify messages into categories.
+- This project creates an ETL pipepline and machine learning pipeline to clean data and predict disaster response categories based on received messages. Natural language processing is used to generate features. A MultiOutputClassifier is used to classify messages into categories.
 
 
 ## Prerequisites 
