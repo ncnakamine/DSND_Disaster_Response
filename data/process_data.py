@@ -1,4 +1,3 @@
-
 # import libraries
 import sys
 import pandas as pd
@@ -6,32 +5,42 @@ from sqlalchemy import create_engine
 
 
 """
-python process_data.py messages.csv categories.csv DisasterResponse
+python data/process_data.py data/messages.csv data/categories.csv data/DisasterResponse.db
 """
 
 
 def main():
 
     if len(sys.argv) == 4:
-        messages_filename, categories_filename, database_name = sys.argv[1:]
+        messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
-    print('loading data...')
-    df = load_and_merge_data(messages_filename, categories_filename)
-    print('cleaning data...')
-    df = clean_data(df)
-    print('saving data...')
-    save_data(df, database_name)
-    print('data saved to {}'.format(sys.argv[3])) 
+        print('loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
+            .format(messages_filepath, categories_filepath))
+        df = load_and_merge_data(messages_filepath, categories_filepath)
+        print('cleaning data...')
+        df = clean_data(df)
+        print('saving data...\n    DATABASE: {}'.format(database_filepath))
+        save_data(df, database_filepath)
+        print('cleaned data saved to {}!'.format(database_filepath)) 
+
+    else:
+        print('Please provide the filepaths of the messages and categories '\
+              'datasets as the first and second argument respectively, as '\
+              'well as the filepath of the database to save the cleaned data '\
+              'to as the third argument. \n\nExample: python process_data.py '\
+              'data/disaster_messages.csv data/disaster_categories.csv '\
+              'data/DisasterResponse.db')
 
 
-def load_and_merge_data(messages_filename, categories_filename):
+
+def load_and_merge_data(messages_filepath, categories_filepath):
     """
     :param dir: directory where messages.csv and categories.csv live
     :return: merged dataframe of messages.csv and categories.csv
     """
 
-    messages = pd.read_csv(messages_filename)
-    categories = pd.read_csv(categories_filename)
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, how='inner', on='id')
     return df
 
@@ -81,7 +90,7 @@ def clean_data(df):
     return df
 
 
-def save_data(df, database_name):
+def save_data(df, database_filepath):
 
     """
     save DisasterResponse.db
@@ -90,7 +99,7 @@ def save_data(df, database_name):
     :return:
     """
 
-    engine = create_engine('sqlite:///{}.db'.format(database_name))
+    engine = create_engine('sqlite:///{}'.format(database_filepath))
     df.to_sql(name='messages', con=engine, index=False)
 
 
