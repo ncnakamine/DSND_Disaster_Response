@@ -11,20 +11,20 @@
 ## Files
 ```
 data
-- categories.csv                     input data
 - DisasterResponse.db                output database from process_data.py
+- categories.csv                     input data
 - messages.csv                       input data
 - process_data.py                    script to clean input data
 
 figures
 - Category_Counts.png                horizontal barplot of category counts
-- create_visuals.py                  script to create pngs in figure folder
 - Genre_Counts.png                   barplot of genres
 - Predicted_Actual_Counts.png        horizontal barplot of predicted and actual counts
+- create_visuals.py                  script to create pngs in figure folder
 
 models
 - classification_report.xlsx         classification report for final model
-- classifier.pkl                     trained model as a pickle file 
+- classifier.pkl.zip                 trained model as a pickle file. zipped to reduce size
 - train_classifier.py                script to train classification model 
 
 ```
