@@ -137,9 +137,9 @@ def evaluate_model(Y, X_test, Y_test, model):
 
     Y_pred = model.predict(X_test)
 
-    # for i, c in enumerate(Y.columns):
-    #     print("Category: ", c.upper())
-    #     print(classification_report(Y_test[c].values, Y_pred[:, i]))
+    for i, c in enumerate(Y.columns):
+        print("Category: ", c.upper())
+        print(classification_report(Y_test[c].values, Y_pred[:, i]))
 
     eval_df = pd.DataFrame()
 
