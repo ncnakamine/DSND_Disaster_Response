@@ -122,28 +122,30 @@ def create_visuals(Y, Y_genre, pred_actual_df):
     plt.xlabel('Counts')
     plt.title('Category Counts')
     plt.tight_layout()
-    plt.savefig('Category_Counts.png')
-    print('figure saved to Category_Counts.png')
+    plt.savefig('figures/Category_Counts.png')
+    print('figure saved to figures/Category_Counts.png')
     plt.clf()
 
     plt.bar(x=Y_genre['genre'].value_counts().index, height=Y_genre['genre'].value_counts(), color='b')
     plt.xlabel('Genre')
     plt.ylabel('Counts')
-    plt.title('Genre Counts')
+    plt.title('figures/Genre Counts')
     plt.tight_layout()
-    plt.savefig('Genre_Counts.png')
-    print('figure saved to Genre_Counts.png')
+    plt.savefig('figures/Genre_Counts.png')
+    print('figure saved to figures/Genre_Counts.png')
     plt.clf()
 
     pred_actual_df.plot(kind='barh')
     plt.xlabel('Counts')
     plt.title('Predicted vs Actual Counts')
     plt.tight_layout()
-    plt.savefig('Predicted_Actual_Counts.png')
-    print('figure saved to Predicted_Actual_Counts.png')
+    plt.savefig('figures/Predicted_Actual_Counts.png')
+    print('figure saved to figures/Predicted_Actual_Counts.png')
 
 
 if __name__ == "__main__":
     main()
+
+
 
 
