@@ -1,4 +1,4 @@
-
+# import libraries
 import pandas as pd
 import pickle
 from sklearn.model_selection import train_test_split
@@ -8,38 +8,34 @@ import re
 from nltk.tokenize import word_tokenize
 from nltk.stem.wordnet import WordNetLemmatizer
 import sys 
-from os.path import isdir,expanduser
-import os
 
 
 """
-python create_visuals.py classifier.pkl DisasterResponse.db 
-
+python figures/create_visuals.py models/classifier.pkl data/DisasterResponse.db 
 """
 
 
 def main():
 
     if len(sys.argv) == 3:
-        model_name, database_name = sys.argv[1:]
-
-    model_path = os.path.split(os.getcwd())[0]+'/models/'
-    model_name = model_path + model_name 
-    database_path = os.path.split(os.getcwd())[0]+'/data/'
-    database_name = database_path + database_name
+        model_filepath, database_filepath = sys.argv[1:]
 
 
-    print('loading model...')
-    model = load_model(model_name)
+        print('loading model...')
+        model = load_model(model_filepath)
 
-    print('loading data...')
-    Y, Y_genre, X_test, Y_test, pred_actual_df = load_data(database_name, model)
+        print('loading data...')
+        Y, Y_genre, X_test, Y_test, pred_actual_df = load_data(database_filepath, model)
 
-    print('creating visuals...')
-    create_visuals(Y, Y_genre, pred_actual_df)
+        print('creating visuals...')
+        create_visuals(Y, Y_genre, pred_actual_df)
 
-
-
+    else:
+        print('Please provide the filepaths of the classifier pickle file '\
+             'and the filepath of the database to the saved cleaned data '\
+             'as the first and second argments, respectively. \n\nExample: '\
+             'python figures/create_visuals.py figures/classifier.pkl '\
+             'data/DisasterResponse.db ')
 
 
 def tokenize(text):
@@ -69,27 +65,26 @@ def tokenize(text):
     return clean_tokens
 
 
-
-def load_model(model_name):
+def load_model(model_filepath):
     """
-    :param model_name:
+    :param model_filepath:
     :return: model
     """
 
-    pickle_off = open(model_name,"rb")
+    pickle_off = open(model_filepath,"rb")
     model = pickle.load(pickle_off)
     return model
 
 
-def load_data(database_name, model):
+def load_data(database_filepath, model):
     """
     Load data necessary for visuals
-    :param database_name:
+    :param database_filepath:
     :param model:
     :return: Y, Y_genre, X_test, Y_test, pred_actual_df
     """
 
-    df = pd.read_sql_table('messages', 'sqlite:///{}'.format(database_name))
+    df = pd.read_sql_table('messages', 'sqlite:///{}'.format(database_filepath))
     X = df['message']
 
     Y_genre = df[['genre']]
@@ -109,12 +104,7 @@ def load_data(database_name, model):
     pred_actual_df.index = pred_actual_df['Categories']
     pred_actual_df.drop('Categories', axis=1, inplace=True)
 
-
     return Y, Y_genre, X_test, Y_test, pred_actual_df
-
-
-
-
 
 
 def create_visuals(Y, Y_genre, pred_actual_df):
@@ -155,7 +145,5 @@ def create_visuals(Y, Y_genre, pred_actual_df):
 
 if __name__ == "__main__":
     main()
-
-
 
 
