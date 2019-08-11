@@ -1,5 +1,3 @@
-
-
 # import libraries
 import pandas as pd
 import re
@@ -17,52 +15,57 @@ from sklearn.model_selection import GridSearchCV
 import pickle
 import sys
 
+
 """
-python train_classifier.py ../data/DisasterResponse.db classifier.pkl
+python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
 """
 
 
 def main():
+
     if len(sys.argv) == 3:
-        database_name, model_name = sys.argv[1:]
+        database_filepath, model_filepath = sys.argv[1:]
 
-    print('loading data...')
-    X, Y = load_data(database_name)
+        print('loading data...\n    DATABASE: {}'.format(database_filepath))
+        X, Y = load_data(database_filepath)
 
-    print('creating train and test sets...')
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=2, test_size=0.25)
+        print('creating train and test sets...')
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, random_state=2, test_size=0.25)
 
-    print('building model...')
-    model = build_model()
+        print('building model...')
+        model = build_model()
 
-    print('training model...')
-    model.fit(X_train, Y_train)
+        print('training model...')
+        model.fit(X_train, Y_train)
 
-    print('evaluating model...')
-    evaluate_model(Y, X_test, Y_test, model)
+        print('evaluating model...')
+        evaluate_model(Y, X_test, Y_test, model)
 
-    print('saving model...')
-    save_model(model, model_name)
+        print('saving model...\n    MODEL: {}')
+        save_model(model, model_filepath)
 
-    print('model saved to ',sys.argv[2])
+        print('model saved to {}!'.format(model_filepath))
+
+    else:
+        print('Please provide the filepath of the disaster messages database '\
+              'as the first argument and the filepath of the pickle file to '\
+              'save the model to as the second argument. \n\nExample: python '\
+              'models/train_classifier.py data/DisasterResponse.db models/classifier.pkl')
 
 
-
-
-def load_data(database_name):
+def load_data(database_filepath):
     """
     load data from database
     :param database_path:
     :return:
     """
 
-    df = pd.read_sql_table('messages', 'sqlite:///{}'.format(database_name))
+    df = pd.read_sql_table('messages', 'sqlite:///{}'.format(database_filepath))
     X = df['message']
     non_y_cols = ['id', 'message', 'original', 'genre']
     y_cols = [col for col in df.columns if col not in non_y_cols]
     Y = df[y_cols]
     return X, Y
-
 
 
 def tokenize(text):
@@ -89,7 +92,6 @@ def tokenize(text):
         clean_tokens.append(clean_token)
 
     return clean_tokens
-
 
 
 def build_model():
@@ -123,8 +125,6 @@ def build_model():
     return pipeline
 
 
-
-
 def evaluate_model(Y, X_test, Y_test, model):
     """
     test model. print precision, recall, and f1 score for each Y category
@@ -156,22 +156,16 @@ def evaluate_model(Y, X_test, Y_test, model):
     print('classification report saved to classification_report.xlsx')
 
 
-
-def save_model(model, model_name):
+def save_model(model, model_filepath):
     """
     save model as pickle file
     :param model: final model
     :param dir: directory to save model
-    :param model_name: model name
+    :param model_filepath: model name
     :return:
     """
 
-    pickle.dump(model, open('{}'.format(model_name), 'wb'))
-
-
-
-
-
+    pickle.dump(model, open('{}'.format(model_filepath), 'wb'))
 
 
 if __name__ == "__main__":
